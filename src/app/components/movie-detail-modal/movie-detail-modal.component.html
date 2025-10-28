@@ -1,0 +1,80 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  
+  <div *ngIf="movieData$ | async as data; else loading" class="modal-content">
+    
+    <button class="modal-close-button" (click)="closeModal.emit()">×</button>
+    
+    <div class="modal-body">
+      <img 
+        class="modal-poster" 
+        [src]="tmdbService.getImageUrl(data.details.poster_path, 'w500')" 
+        [alt]="data.details.title">
+      
+      <div class="modal-info">
+        <h2>{{ data.details.title }}</h2>
+        <p class="tagline" *ngIf="data.details.tagline">{{ data.details.tagline }}</p>
+        
+        <div class="quick-stats">
+          <span class="rating">⭐ {{ data.details.vote_average | number:'1.1-1' }}</span>
+          <span *ngIf="data.details.runtime > 0">
+            {{ (data.details.runtime / 60) | number:'1.0-0' }}h {{ data.details.runtime % 60 }}min
+          </span>
+          <span *ngIf="data.details.genres.length > 0">
+            {{ getGenresString(data.details.genres) }}
+          </span>
+        </div>
+
+        <h3>Sinopsis</h3>
+        <p class="overview">{{ data.details.overview }}</p>
+
+        <div class="watch-providers">
+          <h3>Dónde ver</h3>
+          
+          <div *ngIf="!data.providers; else providersAvailable">
+            <p>No hay información de plataformas disponible para tu región.</p>
+          </div>
+
+          <ng-template #providersAvailable>
+            <div *ngIf="data.providers?.flatrate as platforms" class="provider-section">
+              <h4>Streaming</h4>
+              <div class="provider-list">
+                <img *ngFor="let p of platforms" 
+                     [src]="getLogoUrl(p.logo_path)" 
+                     [title]="p.provider_name" 
+                     [alt]="p.provider_name">
+              </div>
+            </div>
+            
+            <div *ngIf="data.providers?.rent as platforms" class="provider-section">
+              <h4>Alquilar</h4>
+              <div class="provider-list">
+                <img *ngFor="let p of platforms" 
+                     [src]="getLogoUrl(p.logo_path)" 
+                     [title]="p.provider_name" 
+                     [alt]="p.provider_name">
+              </div>
+            </div>
+
+            <div *ngIf="data.providers?.buy as platforms" class="provider-section">
+              <h4>Comprar</h4>
+              <div class="provider-list">
+                <img *ngFor="let p of platforms" 
+                     [src]="getLogoUrl(p.logo_path)" 
+                     [title]="p.provider_name" 
+                     [alt]="p.provider_name">
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template #loading>
+    <div class="modal-loading">
+      <div class="spinner"></div>
+    </div>
+  </ng-template>
+
+</div>

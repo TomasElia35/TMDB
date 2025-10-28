@@ -1,0 +1,99 @@
+<main class="main-content">
+
+  <section class="search-section" (ngSubmit)="onSearchSubmit()">
+    <form>
+      <h2>Búsqueda Inteligente (IA)</h2>
+      <p>
+        Describe con tus propias palabras qué te gustaría ver.
+        (Ej: "una película de acción con persecuciones y un toque de comedia")
+      </p>
+      <div class="search-box">
+        <textarea 
+          name="gemini_prompt" 
+          rows="3" 
+          placeholder="Quiero ver..."
+          [(ngModel)]="searchPrompt"
+          [disabled]="isSearching"></textarea>
+        
+        <button type="submit" class="search-button" [disabled]="isSearching">
+          <div *ngIf="isSearching; else searchIcon" class="spinner-small"></div>
+          <ng-template #searchIcon>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20px" height="20px">
+              <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+          </ng-template>
+          Buscar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="catalog-section">
+
+    <h2 *ngIf="!searchPerformed">Películas Populares</h2>
+    <h2 *ngIf="searchPerformed && !isSearching">Resultados de la Búsqueda</h2>
+    <h2 *ngIf="isSearching">Buscando...</h2>
+
+    <div *ngIf="isLoading && !searchPerformed" class="feedback-container">
+      <div class="spinner"></div>
+      <p>Cargando películas...</p>
+    </div>
+    <div *ngIf="error && !searchPerformed" class="feedback-container error-message">
+      <p>{{ error }}</p>
+    </div>
+
+    <div *ngIf="isSearching" class="feedback-container">
+      <div class="spinner"></div>
+      <p>Analizando tu petición con IA y buscando en TMDB...</p>
+    </div>
+    <div *ngIf="searchError && !isSearching" class="feedback-container error-message">
+      <p>{{ searchError }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !searchPerformed" class="movie-grid">
+      <div *ngFor="let movie of popularMovies" class="movie-card" (click)="openMovieDetails(movie)">
+        
+        <button class="favorite-button" [class.favorited]="movie.isFavorite" (click)="toggleFavorite(movie, $event)" [title]="movie.isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </button>
+        <img [src]="tmdbService.getImageUrl(movie.poster_path, 'w500')" [alt]="movie.title">
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <span class="movie-rating"> ⭐ {{ movie.vote_average | number:'1.1-1' }} </span>
+          <p class="movie-overview">
+            {{ movie.overview || 'Sin descripción disponible.' }}
+          </p>
+        </div>
+        
+      </div>
+    </div>
+
+    <div *ngIf="!isSearching && searchPerformed && searchResults.length > 0" class="movie-grid">
+      <div *ngFor="let movie of searchResults" class="movie-card" (click)="openMovieDetails(movie)">
+        
+        <button class="favorite-button" [class.favorited]="movie.isFavorite" (click)="toggleFavorite(movie, $event)" [title]="movie.isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </button>
+        <img [src]="tmdbService.getImageUrl(movie.poster_path, 'w500')" [alt]="movie.title">
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <span class="movie-rating"> ⭐ {{ movie.vote_average | number:'1.1-1' }} </span>
+          <p class="movie-overview">
+            {{ movie.overview || 'Sin descripción disponible.' }}
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-movie-detail-modal 
+  *ngIf="selectedMovie" 
+  [movie]="selectedMovie" 
+  (closeModal)="closeModal()">
+</app-movie-detail-modal>

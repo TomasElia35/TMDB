@@ -1,0 +1,70 @@
+/* --- src/styles.css --- */
+
+/* 1. Variables de Color (Tema Oscuro) */
+:root {
+  --color-background: #121212; /* Un negro profundo, no total */
+  --color-surface: #1e1e1e;    /* Color para "tarjetas" y fondos secundarios */
+  --color-primary: #0d6efd;     /* Un azul primario (puedes cambiarlo al de TMDB) */
+  --color-primary-hover: #0b5ed7;
+  --color-text: #e0e0e0;       /* Texto principal (blanco suave) */
+  --color-text-muted: #888;   /* Texto secundario */
+  --color-error: #e53935;      /* Rojo para errores */
+  
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --border-radius: 8px;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+}
+
+/* 2. Reseteo Básico y Estilos del Body */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+body {
+
+}
+
+/* 3. Estilos de Texto y Botones Globales */
+h2 {
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+p {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+button {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease-out, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+button:active {
+  /* Pequeño efecto al hacer clic */
+  transform: scale(0.98);
+}

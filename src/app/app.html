@@ -1,0 +1,34 @@
+<ng-container *ngIf="authService.isLoggedIn(); else publicViews">
+
+  <header class="main-header">
+    <div class="logo">QueVeoHoy?</div>
+    <nav class="main-nav">
+      <a routerLink="/home" 
+         routerLinkActive="active" 
+         class="nav-link">Catálogo</a>
+      <a routerLink="/favorites" 
+         routerLinkActive="active" 
+         class="nav-link">Mis Favoritos</a>
+    </nav>
+    <button (click)="onLogout()" class="logout-button">Cerrar Sesión</button>
+  </header>
+
+  <router-outlet></router-outlet>
+
+  <footer class="main-footer">
+    <p>
+      <strong>QueVeoHoy?</strong> - Proyecto de Metodología de Sistemas y Laboratorio IV.
+    </p>
+    <p>
+      Datos e imágenes proporcionados por 
+      <a href="https://www.themoviedb.org/" target="_blank">TMDB</a>. 
+      Búsqueda inteligente potenciada por 
+      <a href="https://gemini.google.com/" target="_blank">Google Gemini</a>.
+    </p>
+  </footer>
+
+</ng-container>
+
+<ng-template #publicViews>
+  <router-outlet></router-outlet>
+</ng-template>

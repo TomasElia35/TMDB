@@ -1,0 +1,360 @@
+/* ============================= */
+/* ESTRUCTURA DE PÁGINA (NUEVO)  */
+/* ============================= */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ocupa al menos toda la altura de la pantalla */
+  width: 100%;
+}
+
+.main-content {
+  /* flex: 1 hace que el contenido principal crezca 
+     y empuje el footer hacia abajo */
+  flex: 1;
+  width: 100%;
+  max-width: 1400px; /* Centra el contenido */
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+/* ============================= */
+/* HEADER (NUEVO)                */
+/* ============================= */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--spacing-lg);
+  height: 70px;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid #333;
+  width: 100%;
+}
+
+.main-header .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.main-nav {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.nav-link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-link:hover {
+  background-color: #333;
+  color: var(--color-text);
+}
+
+.nav-link.active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.logout-button {
+  background-color: var(--color-error);
+  padding: 10px 16px;
+}
+.logout-button:hover {
+  background-color: #c62828;
+}
+
+/* ============================= */
+/* SECCIÓN BÚSQUEDA (NUEVO)      */
+/* ============================= */
+.search-section {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.search-section h2 {
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.search-section p {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+  max-width: 800px;
+}
+
+.search-box {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.search-box textarea {
+  flex: 1;
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: var(--border-radius);
+  padding: 12px;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  font-size: 1rem;
+  resize: vertical; /* Permite al usuario ajustar la altura */
+  min-height: 50px;
+}
+
+.search-box textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+
+.search-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* El botón no se estira */
+  flex-shrink: 0; 
+}
+
+
+/* ============================= */
+/* SECCIÓN CATÁLOGO (MODIFICADO) */
+/* ============================= */
+.catalog-section h2 {
+  font-size: 1.75rem;
+  margin-bottom: var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-surface);
+  padding-bottom: 10px;
+}
+
+/* --- Feedback (Spinner y Error) RNF008 --- */
+/* (Sin cambios, ya estaba bien) */
+.feedback-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  min-height: 300px;
+}
+.error-message { color: var(--color-error); }
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--color-surface);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- Rejilla de Películas (RF002) --- */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-lg); /* Un poco más de espacio */
+}
+
+/* --- TARJETA DE PELÍCULA (MODIFICADA) --- */
+.movie-card {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  overflow: hidden; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  
+  /* Usamos flex para organizar la imagen y la info */
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto; 
+  aspect-ratio: 2 / 3; /* Proporción estándar de póster */
+  object-fit: cover; /* Asegura que la imagen cubra el espacio */
+}
+
+.movie-info {
+  padding: var(--spacing-md);
+  /* La info ocupa el espacio restante */
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.movie-rating {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #ffc107;
+  margin-bottom: 0.75rem;
+}
+
+/* NUEVO: Estilos para la Sinopsis */
+.movie-overview {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-bottom: 0;
+  
+  /* --- TRUCAMIENTO DE TEXTO --- */
+  /* Limita el texto a 4 líneas y pone '...' */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  /* Hace que ocupe el espacio disponible y empuje el botón 
+     (si tuviéramos uno) hacia abajo */
+  flex: 1; 
+}
+
+
+/* ============================= */
+/* FOOTER (NUEVO)                */
+/* ============================= */
+.main-footer {
+  width: 100%;
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
+  text-align: center;
+  margin-top: auto; /* Se asegura de estar al final */
+  border-top: 1px solid #333;
+}
+
+.main-footer p {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.main-footer p:last-child {
+  margin-bottom: 0;
+}
+
+.main-footer a {
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.main-footer a:hover {
+  color: var(--color-primary);
+}
+
+/* --- TARJETA DE PELÍCULA (MODIFICADA) --- */
+.movie-card {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  overflow: hidden; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+  
+  position: relative; /* ¡NUEVO! Para posicionar el botón de favorito */
+  cursor: pointer;   /* ¡NUEVO! Indica que es clickeable */
+}
+/* ... (el resto de .movie-card:hover, img, .movie-info, h3, .movie-rating, .movie-overview se mantienen) ... */
+
+
+/* ¡NUEVO! Estilos para el botón de Favorito (RF005) */
+.favorite-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(18, 18, 18, 0.7); /* Fondo semitransparente */
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 2; /* Encima de la imagen */
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.favorite-button:hover {
+  background-color: rgba(18, 18, 18, 0.9);
+  transform: scale(1.1);
+}
+
+.favorite-button svg {
+  width: 20px;
+  height: 20px;
+  fill: #999; /* Corazón vacío (gris) */
+  transition: fill 0.2s;
+}
+
+/* Estado "Favorito" (marcado) */
+.favorite-button.favorited svg {
+  fill: #e53935; /* Corazón rojo (lleno) */
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* El contenido principal ahora es el contenedor */
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px; /* Centra el contenido */
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+/* ¡NUEVO! Spinner pequeño para el botón (RNF008) */
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* (Asegúrate de tener la animación 'spin' definida, 
+   probablemente ya la tienes del spinner grande) */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Deshabilita el botón y textarea visualmente */
+.search-button:disabled,
+.search-box textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
