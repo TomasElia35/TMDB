@@ -1,7 +1,8 @@
 <main class="main-content">
 
-  <section class="search-section" (ngSubmit)="onSearchSubmit()">
-    <form>
+  <section class="search-section">
+  <form (ngSubmit)="onSearchSubmit()" #searchForm="ngForm">
+ 
       <h2>Búsqueda Inteligente (IA)</h2>
       <p>
         Describe con tus propias palabras qué te gustaría ver.

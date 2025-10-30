@@ -87,6 +87,7 @@ export class LandingPageComponent implements OnInit {
    * ¡NUEVO! Inicia la búsqueda inteligente (CU-03)
    */
   onSearchSubmit(): void {
+    
     if (!this.searchPrompt.trim()) return;
 
     this.isSearching = true; // Mostrar spinner de búsqueda (RNF008)
@@ -102,10 +103,8 @@ export class LandingPageComponent implements OnInit {
         // Flujo Alternativo A1
         throw new Error('La IA no pudo procesar tu solicitud. Intenta ser más específico.');
       }),
-      // 2. Usar filtros para buscar en TMDB (RF004)
-      switchMap(filters => this.tmdbService.discoverMovies(filters)),
-      // 3. Marcar los favoritos en los resultados
-      switchMap(tmdbResponse => this.fetchAndMergeFavorites(of(tmdbResponse)))
+      switchMap(filters => this.tmdbService.discoverMovies(filters)), // Llamada a TMDB
+      switchMap(tmdbResponse => this.fetchAndMergeFavorites(of(tmdbResponse))) // Marcar favoritos
     ).subscribe({
       next: (movies) => {
         this.searchResults = movies;
@@ -165,6 +164,8 @@ export class LandingPageComponent implements OnInit {
       this.isLoading = false;
     }
   };
+
+  
 
   /**
    * ¡NUEVO! Añade o quita de favoritos (RF005)

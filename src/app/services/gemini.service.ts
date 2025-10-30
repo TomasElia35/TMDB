@@ -40,29 +40,26 @@ export class GeminiService {
   /**
    * Llama a la API de Gemini para obtener los filtros (RF003)
    */
-  getSmartSearchFilters(userPrompt: string): Observable<GeminiFilters> {
-    
-    // 1. Obtener la lista de géneros de TMDB (desde la caché)
-    return this.tmdbService.getGenres().pipe(
-      switchMap(genres => {
-        // 2. Construir el prompt
-        const geminiPrompt = this.buildPrompt(userPrompt, genres);
-
-        // 3. Construir el cuerpo de la petición
-        const requestBody: GeminiApiRequest = {
-          contents: [{ parts: [{ text: geminiPrompt }] }]
-        };
-
-        // 4. Llamar a la API de Gemini
-        return this.http.post<GeminiApiResponse>(this.geminiApiUrl, requestBody);
-      }),
-      map(response => {
-        // 5. Parsear la respuesta
-        const jsonText = response.candidates[0].content.parts[0].text;
-        return this.parseGeminiResponse(jsonText);
-      })
-    );
-  }
+getSmartSearchFilters(userPrompt: string): Observable<GeminiFilters> {
+  // 1. Obtener géneros de TMDB
+  return this.tmdbService.getGenres().pipe(
+    switchMap(genres => {
+      // 2. Construir prompt
+      const geminiPrompt = this.buildPrompt(userPrompt, genres);
+      // 3. Preparar request
+      const requestBody: GeminiApiRequest = {
+        contents: []
+      };
+      // 4. Llamar a Gemini API
+      return this.http.post<GeminiApiResponse>(this.geminiApiUrl, requestBody);
+    }),
+    map(response => {
+      // 5. Parsear respuesta
+      const jsonText = response.candidates[0].content.parts[0].text;
+      return this.parseGeminiResponse(jsonText);
+    })
+  );
+}
 
   /**
    * Construye el prompt para la IA
@@ -92,6 +89,7 @@ export class GeminiService {
     `;
   }
 
+  
   /**
    * Limpia y parsea la respuesta JSON de Gemini
    */

@@ -71,38 +71,35 @@ export class TmdbService {
    * ¡NUEVO! Obtiene la lista de géneros de TMDB (para la IA)
    * Usa shareReplay(1) para cachear el resultado y no llamarlo cada vez.
    */
-  getGenres(): Observable<Genre[]> {
-    if (!this.genresCache$) {
-      this.genresCache$ = this.http.get<GenresResponse>(`${this.apiUrl}/genre/movie/list`).pipe(
-        map(response => response.genres),
-        shareReplay(1) // Cachea el resultado
-      );
-    }
-    return this.genresCache$;
+getGenres(): Observable<Genre[]> {
+  if (!this.genresCache$) {
+    this.genresCache$ = this.http.get<GenresResponse>(`${this.apiUrl}/genre/movie/list`).pipe(
+      map(response => response.genres),
+      shareReplay(1) // Cachea el resultado
+    );
   }
+  return this.genresCache$;
+}
 
   /**
    * ¡NUEVO! Busca películas usando los filtros de IA (RF004)
    * Llama a /discover/movie
    */
-  discoverMovies(filters: GeminiFilters): Observable<TmdbApiResponse> {
-    const url = `${this.apiUrl}/discover/movie`;
+discoverMovies(filters: GeminiFilters): Observable<TmdbApiResponse> {
+  const url = `${this.apiUrl}/discover/movie`;
+  let params = new HttpParams()
+    .set('sort_by', 'popularity.desc')
+    .set('vote_count.gte', '100');
 
-    let params = new HttpParams()
-      .set('sort_by', 'popularity.desc')
-      .set('vote_count.gte', '100'); // Evita películas desconocidas
-
-    if (filters.genreIds && filters.genreIds.length > 0) {
-      params = params.set('with_genres', filters.genreIds.join(','));
-    }
-    
-    if (filters.minRating > 0) {
-      params = params.set('vote_average.gte', filters.minRating.toString());
-    }
-
-    // El interceptor añadirá api_key y language
-    return this.http.get<TmdbApiResponse>(url, { params });
+  if (filters.genreIds && filters.genreIds.length > 0) {
+    params = params.set('with_genres', filters.genreIds.join(','));
   }
+  if (filters.minRating > 0) {
+    params = params.set('vote_average.gte', filters.minRating.toString());
+  }
+  // El interceptor añadirá api_key y language
+  return this.http.get<TmdbApiResponse>(url, { params });
+}
 
   /**
    * Obtiene la lista de películas populares (RF002 / CU-02)
